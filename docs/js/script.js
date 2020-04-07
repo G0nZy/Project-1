@@ -16,7 +16,7 @@ function removePunc(str) {
 }
 
 $("#submitBTN").on("click", function (event) {
-    // console.log("you submitted something!");
+    console.log("you submitted something!");
     var myArtist = $("#first_name3").val();
     var mySong = $("#first_name2").val();
     mySong = mySong.trim();
@@ -57,5 +57,13 @@ $("#submitBTN").on("click", function (event) {
             }
         });
         console.log(earliestRelId, earliestRelDate, earliestRelAlbum);
+        var imageUrl = "https://coverartarchive.org/release/" + earliestRelId
+        $.ajax({
+            url: imageUrl,
+            method: "GET"
+        }).then(function (response) {
+            var imgUrl = response.images[0].image;
+            $(".responsive-img").attr("src", imgUrl);
+        })
     })
 })
