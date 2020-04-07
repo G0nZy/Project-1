@@ -92,3 +92,59 @@ $("#submitBTN").on("click", function (event) {
         })
     })
 })
+
+$("#submitBTN").on("click", function(event) {
+    event.preventDefault();
+    /* #user-input will be changed to #first_name3*/
+    var input = $("#first_name3").val();
+    console.log(input);
+
+  // Storing our giphy API URL for a random cat image
+  var queryURL = "https://cors-anywhere.herokuapp.com/https://tastedive.com/api/similar?q=" + input + "&k=362011-songinth-1KFPJ7MX&info=1";
+
+  // Perfoming an AJAX GET request to our queryURL
+  $.ajax({
+    url: queryURL,
+    method: "GET"
+  })
+
+  // After the data from the AJAX request comes back
+    .then(function(response) {
+        console.log(response);
+        console.log(response.Similar.Results);
+        var userResults = response.Similar.Results;
+        var output = $(".output");
+        console.log(response.Similar.Results[0].wUrl);
+        console.log(response.Similar.Results[0].yUrl);
+
+        for (let i = 0; i < userResults.length - 16; i++) {
+            const element = userResults[i];
+            console.log(element.wUrl);
+            var wiki = element.wUrl;
+            console.log(element.yUrl);
+            var youT = element.yUrl;
+            console.log(wiki);
+            console.log(youT);
+
+          /*var link1 = $("<a>");
+          link1.attr("href", wiki);
+          console.log(wiki);
+          link1.attr("title", "Wikipedia");
+          link1.text("Wikipedia link: " + wiki);
+          link1.addClass("link");
+          $(output).append(link1);
+          console.log(link1);
+
+          var link2 = $("<a>");
+          link2.attr("href", youT);
+          console.log(youT);
+          link2.attr("title", "YouTube");
+          link2.text("YouTube link: " + youT);
+          link2.addClass("link");
+          $(output).append(link2);
+          console.log(link2);*/
+
+            
+        }
+    });
+});
