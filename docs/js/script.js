@@ -1,4 +1,25 @@
-function removePunc(str) {
+function replaceEscapeChars(str) { //helps with searches. certains songs with characters such as # signs do not search correctly without this
+    var escapeChars = ["%", " ", "!", "\"", "#", "$", "&", "\'", "(", ")", "*", "+", ",", "-", ".", "/"];
+    var escapeCharReplacements = ["%25", "%20", "%21", "%22", "%23", "%24", "%26", "%27", "%28", "%29", "%2A", "%2B", "%2C", "%2D", "%2E", "%2F"];
+    str = str.split('');
+    var newStr = '';
+    for (let j = 0; j < str.length; j++) {
+        var replaced = false;
+        for (let i = 0; i < escapeChars.length; i++) {
+            if (str[j] === escapeChars[i]) {
+                newStr += escapeCharReplacements[i]
+                replaced = true; //the character was replaced
+            }
+        }
+        if (!replaced) { //if the character wasn't replaced, just add the old character to the string.
+            newStr += str[j];
+        }
+    }
+    console.log(newStr);
+    return newStr;
+}
+
+function removePunc(str) { //removes problematic characters when searching the returned releases array for matching titles. One example where this is needed is God's Plan
     var lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz0123456789";
     lowerCaseLetters = lowerCaseLetters.split("");
     str = str.toLowerCase();
@@ -17,14 +38,18 @@ function removePunc(str) {
 
 $("#submitBTN").on("click", function (event) {
     console.log("you submitted something!");
-    var myArtist = $("#first_name3").val();
+    var myArtist = $("#first_name3").val(); //I may want to turn artist and song into objects in order to more efficiently house their properties
     var mySong = $("#first_name2").val();
     mySong = mySong.trim();
+    var mySongAddress = replaceEscapeChars(mySong);
+    var myArtistAddress = replaceEscapeChars(myArtist);
+    var myUrl = "https://musicbrainz.org/ws/2/recording?query=" + mySongAddress + "%20AND%20artist:" + myArtistAddress + "&fmt=json";
+    console.log(myUrl);
     $.ajax({
-        url: "https://musicbrainz.org/ws/2/recording?query=" + mySong + "%20AND%20artist:" + myArtist + "&fmt=json",
+        url: myUrl,
         method: "GET"
     }).then(function (response) {
-        // console.log(response);
+        console.log(response);
         var earliestRelYear = 3000;
         var recordings = response.recordings;
         var earliestRelDate;
