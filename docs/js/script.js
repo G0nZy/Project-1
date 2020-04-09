@@ -109,11 +109,10 @@ $("#submitBTN").on("click", function (event) {
 
 $("#submitBTN").on("click", function (event) {
     event.preventDefault();
-    /* #user-input will be changed to #first_name3*/
     var input = $("#first_name3").val();
     console.log(input);
 
-    // Storing our giphy API URL for a random cat image
+
     var queryURL = "https://cors-anywhere.herokuapp.com/https://tastedive.com/api/similar?q=" + input + "&k=362011-songinth-1KFPJ7MX&info=1";
 
     // Perfoming an AJAX GET request to our queryURL
@@ -127,7 +126,7 @@ $("#submitBTN").on("click", function (event) {
             console.log(response);
             console.log(response.Similar.Results);
             var userResults = response.Similar.Results;
-            var output = $(".output");
+            var output = $("#taste-dive");
             console.log(response.Similar.Results[0].wUrl);
             console.log(response.Similar.Results[0].yUrl);
 
@@ -140,23 +139,32 @@ $("#submitBTN").on("click", function (event) {
                 console.log(wiki);
                 console.log(youT);
 
-                /*var link1 = $("<a>");
+                
+                var li = $("<li>");
+                var link1 = $("<a>");
                 link1.attr("href", wiki);
                 console.log(wiki);
                 link1.attr("title", "Wikipedia");
                 link1.text("Wikipedia link: " + wiki);
                 link1.addClass("link");
-                $(output).append(link1);
-                console.log(link1);
-      
+                //console.log(link1[0].relList.href);
+                var wikiInfo = $(li).text(link1);
+                $(output).append(wikiInfo);
+                console.log(wikiInfo);
+    
+
+                
+                var li = $("<li>");
                 var link2 = $("<a>");
                 link2.attr("href", youT);
                 console.log(youT);
                 link2.attr("title", "YouTube");
                 link2.text("YouTube link: " + youT);
                 link2.addClass("link");
-                $(output).append(link2);
-                console.log(link2);*/
+                console.log(link2);
+                var youInfo = $(li).text(link2);
+                $(output).append(youInfo);
+                console.log(youInfo);
 
 
             }
