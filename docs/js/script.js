@@ -103,13 +103,7 @@ $("#submitBTN").on("click", function (event) {
         }).then(function (response) {
             var imgUrl = response.images[0].image;
             $(".responsive-img").attr("src", imgUrl);
-        })
-    })
-})
-
-$("#submitBTN").on("click", function (event) {
-    event.preventDefault();
-    var input = $("#first_name3").val();
+            var input = $("#first_name3").val();
     console.log(input);
 
 
@@ -129,44 +123,52 @@ $("#submitBTN").on("click", function (event) {
             var output = $("#taste-dive");
             console.log(response.Similar.Results[0].wUrl);
             console.log(response.Similar.Results[0].yUrl);
+            var h6c = $("<h6> You might be interested in: </h6>");
+            $("#infoDiv").append(h6c);
 
             for (let i = 0; i < userResults.length - 16; i++) {
                 const element = userResults[i];
-                console.log(element.wUrl);
+                console.log(element, "userResults[]");
+                //console.log(element.wUrl);
                 var wiki = element.wUrl;
                 console.log(element.yUrl);
                 var youT = element.yUrl;
+                var name = element.Name;
+                console.log(name);
                 console.log(wiki);
                 console.log(youT);
 
-                
-                var li = $("<li>");
+                //var ul = $("<ul>");
+                //var li = $("<li>");
                 var link1 = $("<a>");
-                link1.attr("href", wiki);
+                $(link1).attr("href", wiki);
                 console.log(wiki);
-                link1.attr("title", "Wikipedia");
-                link1.text("Wikipedia link: " + wiki);
-                link1.addClass("link");
-                //console.log(link1[0].relList.href);
-                var wikiInfo = $(li).text(link1);
-                $(output).append(wikiInfo);
-                console.log(wikiInfo);
-    
-
+                $(link1).attr("title", "Wikipedia");
+                $(link1).text("Wikipedia link: " + wiki);
+                $(link1).addClass("link");
+                $("#infoDiv");
+                $("#infoDiv").append("<p>" + name + "</p>");
+                $("#infoDiv").append(link1);
                 
-                var li = $("<li>");
+                
                 var link2 = $("<a>");
-                link2.attr("href", youT);
+                $(link2).attr("href", youT);
                 console.log(youT);
-                link2.attr("title", "YouTube");
-                link2.text("YouTube link: " + youT);
-                link2.addClass("link");
-                console.log(link2);
-                var youInfo = $(li).text(link2);
-                $(output).append(youInfo);
-                console.log(youInfo);
+                $(link2).attr("title", "YouTube");
+                $(link2).text("YouTube link: " + youT);
+                $(link2).addClass("link");
+                $("#infoDiv");
+                $("#infoDiv").append(link2);
 
 
             }
         });
+
+        })
+    })
+})
+
+$("#submitBTN").on("click", function (event) {
+    event.preventDefault();
+    
 });
