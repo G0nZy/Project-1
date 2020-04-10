@@ -103,72 +103,116 @@ $("#submitBTN").on("click", function (event) {
         }).then(function (response) {
             var imgUrl = response.images[0].image;
             $(".responsive-img").attr("src", imgUrl);
+
             var input = $("#first_name3").val();
-    console.log(input);
+            console.log(input);
+            var queryURL = "https://cors-anywhere.herokuapp.com/https://tastedive.com/api/similar?q=" + input + "&k=362011-songinth-1KFPJ7MX&info=1";
+
+            // Perfoming an AJAX GET request to our queryURL
+            $.ajax({
+                url: queryURL,
+                method: "GET"
+            })
+
+                // After the data from the AJAX request comes back
+                .then(function (response) {
+                    console.log(response);
+                    console.log(response.Similar.Results);
+                    var userResults = response.Similar.Results;
+                    var output = $("#taste-dive");
+                    console.log(response.Similar.Results[0].wUrl);
+                    console.log(response.Similar.Results[0].yUrl);
+                    var h6c = $("<h6> You might be interested in: </h6>");
+                    $("#infoDiv").append(h6c);
+
+                    for (let i = 0; i < userResults.length - 16; i++) {
+                        const element = userResults[i];
+                        console.log(element, "userResults[]");
+                        //console.log(element.wUrl);
+                        var wiki = element.wUrl;
+                        console.log(element.yUrl);
+                        var youT = element.yUrl;
+                        var name = element.Name;
+                        console.log(name);
+                        console.log(wiki);
+                        console.log(youT);
+
+                        //var ul = $("<ul>");
+                        //var li = $("<li>");
+                        var link1 = $("<a>");
+                        $(link1).attr("href", wiki);
+                        console.log(wiki);
+                        $(link1).attr("title", "Wikipedia");
+                        $(link1).text("Wikipedia link: " + wiki);
+                        $(link1).addClass("link");
+                        $("#infoDiv");
+                        $("#infoDiv").append("<p>" + name + "</p>");
+                        $("#infoDiv").append(link1);
 
 
-    var queryURL = "https://cors-anywhere.herokuapp.com/https://tastedive.com/api/similar?q=" + input + "&k=362011-songinth-1KFPJ7MX&info=1";
-
-    // Perfoming an AJAX GET request to our queryURL
-    $.ajax({
-        url: queryURL,
-        method: "GET"
-    })
-
-        // After the data from the AJAX request comes back
-        .then(function (response) {
-            console.log(response);
-            console.log(response.Similar.Results);
-            var userResults = response.Similar.Results;
-            var output = $("#taste-dive");
-            console.log(response.Similar.Results[0].wUrl);
-            console.log(response.Similar.Results[0].yUrl);
-            var h6c = $("<h6> You might be interested in: </h6>");
-            $("#infoDiv").append(h6c);
-
-            for (let i = 0; i < userResults.length - 16; i++) {
-                const element = userResults[i];
-                console.log(element, "userResults[]");
-                //console.log(element.wUrl);
-                var wiki = element.wUrl;
-                console.log(element.yUrl);
-                var youT = element.yUrl;
-                var name = element.Name;
-                console.log(name);
-                console.log(wiki);
-                console.log(youT);
-
-                //var ul = $("<ul>");
-                //var li = $("<li>");
-                var link1 = $("<a>");
-                $(link1).attr("href", wiki);
-                console.log(wiki);
-                $(link1).attr("title", "Wikipedia");
-                $(link1).text("Wikipedia link: " + wiki);
-                $(link1).addClass("link");
-                $("#infoDiv");
-                $("#infoDiv").append("<p>" + name + "</p>");
-                $("#infoDiv").append(link1);
-                
-                
-                var link2 = $("<a>");
-                $(link2).attr("href", youT);
-                console.log(youT);
-                $(link2).attr("title", "YouTube");
-                $(link2).text("YouTube link: " + youT);
-                $(link2).addClass("link");
-                $("#infoDiv");
-                $("#infoDiv").append(link2);
+                        var link2 = $("<a>");
+                        $(link2).attr("href", youT);
+                        console.log(youT);
+                        $(link2).attr("title", "YouTube");
+                        $(link2).text("YouTube link: " + youT);
+                        $(link2).addClass("link");
+                        $("#infoDiv");
+                        $("#infoDiv").append(link2);
 
 
-            }
-        });
+
+                    }
+                    //////////////////////////////////////////////////Getting Wikipedia data for the date the album was release///////////////////////////
+                    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                    var month = '';
+                    //If the earliest release date contains month information...
+                    if (earliestRelDate.length > 4) {
+                        console.log(earliestRelDate);
+                        month = earliestRelDate.substring(5, 7)
+                        month = Number(month) - 1;
+                    }
+                    //otherwise, pick a random month...
+                    else month = Math.floor(Math.random() * 12);
+
+                    //the text to find the index of in the page.
+                    var startDateText = "=== " + months[month]
+                    var endDateText = "=== " + months[month + 1]
+
+                    //make an ajax call to wikipedia api based on the release year
+                    $.ajax({
+                        url: "https://cors-anywhere.herokuapp.com/https://en.wikipedia.org/w/api.php?action=query&prop=extracts&explaintext=true&titles=" + earliestRelYear + "&format=json",
+                        method: 'GET'
+                    }).then(function (response) {
+                        var facts = [];
+                        var pages = Object.entries(response.query.pages);
+                        var page = pages[0];
+                        var text = page[1].extract;
+                        var startDate = text.indexOf(startDateText);
+                        var endDate = text.indexOf(endDateText);
+                        text = text.slice(startDate, endDate);
+
+                        for (let i = 1; i <= 31; i++) {
+                            var startDay = months[month] + " " + i;
+                            var startDayStrL = startDay.length;
+                            startDayIndex = text.indexOf(startDay);
+                            if (startDayIndex > -1) {
+                                var fact = text.substring(startDayIndex);
+                                fact = fact.substring(startDayStrL);
+                                var endIndex = fact.indexOf(months[month]);
+                                fact = fact.substring(0, endIndex);
+                                fact = startDay + " - " + fact;
+                                facts.push(fact);
+                            }
+                        }
+                        var randFact = facts[Math.floor(Math.random() * facts.length)];
+
+                        var ptag = $("<p>");
+                        $(ptag).text(randFact);
+                        $("#infoDiv").append(ptag);
+                    });
+                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                });
 
         })
     })
 })
-
-$("#submitBTN").on("click", function (event) {
-    event.preventDefault();
-    
-});
