@@ -1,7 +1,7 @@
 $(document).ready(function () {
     ///////////////////////////////////////////ajax error handler for when album art doesn't exist/////////////////////////////////////////////
     $(document).ajaxError(function () {
-        $(".responsive-img").attr("src", "images/album-art-not-found.png");
+        $(".responsive-img").attr("src", "../docs/images/album-art-not-found.png");
     });
 
     /////////////////////////////////////////////////////////////////functions////////////////////////////////////////////////////////////////
