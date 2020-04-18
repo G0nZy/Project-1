@@ -3,6 +3,9 @@
 ### Project Description
 The ideal instantiation of this project will give the user an expansive experience through the medium of song choice. The user will choose a song and, upon the click of a button, written information about that song will appear, including the album from which it comes and when it was recorded. Additionally, a photo of the album will appear along with further song and artist suggestions based on similarities to the chosen song. These suggestions will have Wikipedia and YouTube links. The app will also display historical information based on the time period of the chosen song.
 
+### Deployed Link
+[A Song in the Life](https://github.com/G0nZy/song-in-the-life)
+
 ### Project Status
 The current project has reached the level of Minimum Viable Product (MVP). Further iterations are under consideration and will be discussed in the Future Development section below.
 
